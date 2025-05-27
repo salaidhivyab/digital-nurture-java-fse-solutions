@@ -14,6 +14,6 @@ Welcome! This repository contains solutions to the exercise questions of Cogniza
 
 - ☕ **Java Practise**  
   💻 Includes **Java exercise solutions**.  
-  ⚠️ _Note: This section is **partially completed**
+  ⚠️ _Note: This section is **partially completed**_
 
 ---
