@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Connect Hub</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            /* border-radius: 0 0 2px 2px; */
+        }
+        
+        .main-nav {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 15px;
+            background: #34495e;
+            /* border-radius: 0.2rem; */
+        }
+        
+        .main-nav a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .main-nav a:hover {
+            color: #f39c12;
+        }
+        
+        .welcome-box {
+            background: #3498db;
+            color: white;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .special-offer {
+            color: #e74c3c;
+            font-weight: 700;
+        }
+        
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .event-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .event-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .event-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .event-card h3 {
+            padding: 15px;
+            margin: 0;
+            background: #f8f9fa;
+        }
+        
+        .registration-form {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 40px 0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            max-width: 500px;
+        }
+        
+        .btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #2ecc71;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Community Connect Hub</h1>
+        <p>Your gateway to local events and activities</p>
+    </header>
+    
+    <nav class="main-nav">
+        <a href="#home">Home</a>
+        <a href="#events">Upcoming Events</a>
+        <a href="#register">Register</a>
+        <a href="#contact">Contact Us</a>
+    </nav>
+    
+    <section id="home">
+        <div class="welcome-box">
+            <h2>Welcome to Our Community!</h2>
+            <p>Discover exciting events happening in your neighborhood. Check out our <span class="special-offer">limited-time offers</span> for new members!</p>
+        </div>
+    </section>
+    
+    <section id="events">
+        <h2>Featured Community Events</h2>
+        
+        <div class="event-grid">
+            <div class="event-card">
+                <h3>Annual Town Festival</h3>
+            </div>
+            
+            <div class="event-card">
+                <h3>Sunday Farmers Market</h3>
+            </div>
+            
+            <div class="event-card">
+                <h3>Summer Music Nights</h3>
+            </div>
+            
+            <div class="event-card">
+                <h3>Artisan Craft Workshop</h3>
+            </div>
+        </div>
+    </section>
+    
+    <section id="register">
+        <div class="registration-form">
+            <h2>Event Registration</h2>
+            <form id="eventForm">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" class="form-control" required placeholder="Your full name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" class="form-control" required placeholder="Your email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="eventSelect">Choose Event</label>
+                    <select id="eventSelect" class="form-control" required>
+                        <option value="">Select an event</option>
+                        <option value="festival">Annual Town Festival</option>
+                        <option value="market">Farmers Market</option>
+                        <option value="music">Summer Music Nights</option>
+                        <option value="workshop">Artisan Craft Workshop</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="eventDate">Preferred Date</label>
+                    <input type="date" id="eventDate" class="form-control" required>
+                </div>
+                
+                <button type="submit" class="btn">Register Now</button>
+            </form>
+        </div>
+    </section>
+    
+    <footer id="contact">
+        <p>© 2023 Community Connect Hub. All rights reserved.</p>
+        <p>Email us at: info@communityhub.example.com</p>
+    </footer>
+
+    <script>
+        document.getElementById('eventForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for registering! We will contact you soon.');
+            this.reset();
+        });
+
+        const eventCards = document.querySelectorAll('.event-card');
+        eventCards.forEach(card => {
+            card.addEventListener('dblclick', function() {
+                this.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html>
