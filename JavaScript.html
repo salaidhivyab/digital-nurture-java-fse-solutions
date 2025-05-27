@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Community Event Portal</title>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+     <style>body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+.search-filter {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.search-filter input, .search-filter select {
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+main {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.events-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.event-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+}
+
+.event-card h3 {
+    margin-top: 0;
+    color: #4CAF50;
+}
+
+.event-card .date {
+    font-weight: bold;
+    color: #666;
+}
+
+.event-card .location {
+    font-style: italic;
+}
+
+.event-card .seats {
+    margin: 1rem 0;
+}
+
+.event-card .register-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.event-card .register-btn:hover {
+    background-color: #45a049;
+}
+
+.event-card .register-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.registration-form {
+    background-color: #f9f9f9;
+    padding: 2rem;
+    border-radius: 8px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.8rem;
+    display: block;
+    margin-top: 0.3rem;
+}
+
+button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+#registrationStatus {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 4px;
+}
+
+.success {
+    background-color: #dff0d8;
+    color: #3c763d;
+}
+
+.error {
+    background-color: #f2dede;
+    color: #a94442;
+}
+
+.loading-spinner {
+    display: none;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 4px solid #4CAF50;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 1rem auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}</style>
+</head>
+<body>
+    <header>
+        <h1>Community Event Portal</h1>
+        <div class="search-filter">
+            <input type="text" id="searchInput" placeholder="Search events...">
+            <select id="categoryFilter">
+                <option value="all">All Categories</option>
+                <option value="music">Music</option>
+                <option value="workshop">Workshop</option>
+                <option value="sports">Sports</option>
+                <option value="art">Art</option>
+            </select>
+            <select id="locationFilter">
+                <option value="all">All Locations</option>
+                <option value="downtown">Downtown</option>
+                <option value="park">City Park</option>
+                <option value="library">Public Library</option>
+            </select>
+        </div>
+    </header>
+
+    <main>
+        <section class="events-container" id="eventsContainer">
+            <!-- Events will be dynamically added here -->
+        </section>
+
+        <section class="registration-form">
+            <h2>Register for an Event</h2>
+            <form id="registrationForm">
+                <div class="form-group">
+                    <label for="userName">Name:</label>
+                    <input type="text" id="userName" required>
+                    <span class="error-message" id="nameError"></span>
+                </div>
+                <div class="form-group">
+                    <label for="userEmail">Email:</label>
+                    <input type="email" id="userEmail" required>
+                    <span class="error-message" id="emailError"></span>
+                </div>
+                <div class="form-group">
+                    <label for="eventSelect">Select Event:</label>
+                    <select id="eventSelect" required>
+                        <option value="">-- Please choose an event --</option>
+                        <!-- Events will be dynamically added -->
+                    </select>
+                </div>
+                <button type="submit">Register</button>
+            </form>
+            <div id="registrationStatus"></div>
+        </section>
+    </main>
+
+    <script>
+        // 1. JavaScript Basics & Setup
+console.log("Welcome to the Community Portal");
+
+window.onload = function() {
+    alert("Page fully loaded! Welcome to our Community Event Portal.");
+    
+    // Initialize the application
+    initializeApp();
+};
+
+// 2. Syntax, Data Types, and Operators
+let events = [
+    {
+        id: 1,
+        name: "Summer Music Festival",
+        date: "2023-08-15",
+        category: "music",
+        location: "park",
+        seats: 100,
+        description: "Enjoy live music from local bands in the city park."
+    },
+    {
+        id: 2,
+        name: "Workshop on Baking",
+        date: "2023-08-20",
+        category: "workshop",
+        location: "library",
+        seats: 20,
+        description: "Learn the art of baking from professional chefs."
+    },
+    {
+        id: 3,
+        name: "Community Soccer Match",
+        date: "2023-08-25",
+        category: "sports",
+        location: "downtown",
+        seats: 50,
+        description: "Join the annual community soccer tournament."
+    },
+    {
+        id: 4,
+        name: "Art Exhibition",
+        date: "2023-09-01",
+        category: "art",
+        location: "library",
+        seats: 30,
+        description: "View amazing artworks from local artists."
+    },
+    {
+        id: 5,
+        name: "Jazz Night",
+        date: "2023-07-30", // Past event for testing
+        category: "music",
+        location: "downtown",
+        seats: 0, // Full event for testing
+        description: "Relaxing evening with smooth jazz performances."
+    }
+];
+
+// 3. Conditionals, Loops, and Error Handling
+function displayEvents(eventsToDisplay) {
+    const eventsContainer = document.getElementById('eventsContainer');
+    eventsContainer.innerHTML = '';
+    
+    eventsToDisplay.forEach(event => {
+        const today = new Date();
+        const eventDate = new Date(event.date);
+        
+        // Only show upcoming events with available seats
+        if (eventDate >= today && event.seats > 0) {
+            const eventCard = document.createElement('div');
+            eventCard.className = 'event-card';
+            
+            eventCard.innerHTML = `
+                <h3>${event.name}</h3>
+                <p class="date">${formatDate(event.date)}</p>
+                <p class="location">Location: ${formatLocation(event.location)}</p>
+                <p class="category">Category: ${event.category}</p>
+                <p class="description">${event.description}</p>
+                <p class="seats">Seats available: ${event.seats}</p>
+                <button class="register-btn" data-id="${event.id}">Register</button>
+            `;
+            
+            eventsContainer.appendChild(eventCard);
+        }
+    });
+    
+    // Add event listeners to register buttons
+    document.querySelectorAll('.register-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const eventId = parseInt(this.getAttribute('data-id'));
+            try {
+                registerForEvent(eventId);
+            } catch (error) {
+                console.error("Registration error:", error);
+                document.getElementById('registrationStatus').textContent = error.message;
+                document.getElementById('registrationStatus').className = 'error';
+            }
+        });
+    });
+}
+
+function formatDate(dateString) {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+}
+
+function formatLocation(location) {
+    const locations = {
+        'downtown': 'Downtown Square',
+        'park': 'City Park',
+        'library': 'Public Library'
+    };
+    return locations[location] || location;
+}
+
+// 4. Functions, Scope, Closures, Higher-Order Functions
+function initializeApp() {
+    // Display all valid events initially
+    displayEvents(events);
+    
+    // Set up event listeners for filters
+    document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+    document.getElementById('locationFilter').addEventListener('change', applyFilters);
+    document.getElementById('searchInput').addEventListener('keydown', applyFilters);
+    
+    // Set up registration form
+    document.getElementById('registrationForm').addEventListener('submit', handleFormSubmit);
+    
+    // Populate event dropdown in form
+    populateEventDropdown();
+    
+    // Create closure for tracking registrations by category
+    const registrationTracker = createRegistrationTracker();
+    
+    // Example of using the tracker
+    registrationTracker('music'); // Increment music registrations
+    console.log("Total music registrations:", registrationTracker('music', true)); // Get count
+}
+
+function createRegistrationTracker() {
+    const registrationsByCategory = {};
+    
+    return function(category, getCount = false) {
+        if (getCount) {
+            return registrationsByCategory[category] || 0;
+        }
+        
+        if (!registrationsByCategory[category]) {
+            registrationsByCategory[category] = 0;
+        }
+        registrationsByCategory[category]++;
+        return `Registration for ${category} recorded.`;
+    };
+}
+
+function applyFilters() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const category = document.getElementById('categoryFilter').value;
+    const location = document.getElementById('locationFilter').value;
+    
+    const filteredEvents = events.filter(event => {
+        const matchesSearch = event.name.toLowerCase().includes(searchTerm) || 
+                             event.description.toLowerCase().includes(searchTerm);
+        const matchesCategory = category === 'all' || event.category === category;
+        const matchesLocation = location === 'all' || event.location === location;
+        
+        return matchesSearch && matchesCategory && matchesLocation;
+    });
+    
+    displayEvents(filteredEvents);
+}
+
+function populateEventDropdown() {
+    const eventSelect = document.getElementById('eventSelect');
+    eventSelect.innerHTML = '<option value="">-- Please choose an event --</option>';
+    
+    const today = new Date();
+    
+    events.forEach(event => {
+        const eventDate = new Date(event.date);
+        if (eventDate >= today && event.seats > 0) {
+            const option = document.createElement('option');
+            option.value = event.id;
+            option.textContent = `${event.name} (${formatDate(event.date)})`;
+            eventSelect.appendChild(option);
+        }
+    });
+}
+
+// 5. Objects and Prototypes
+function Event(id, name, date, category, location, seats, description) {
+    this.id = id;
+    this.name = name;
+    this.date = date;
+    this.category = category;
+    this.location = location;
+    this.seats = seats;
+    this.description = description;
+}
+
+Event.prototype.checkAvailability = function() {
+    const today = new Date();
+    const eventDate = new Date(this.date);
+    return eventDate >= today && this.seats > 0;
+};
+
+// Example of using the Event constructor
+const newEvent = new Event(
+    6,
+    "Poetry Reading",
+    "2023-09-10",
+    "art",
+    "library",
+    15,
+    "Listen to beautiful poetry from local writers."
+);
+
+// Add the new event to our array
+events.push(newEvent);
+
+// 6. Arrays and Methods
+function addEvent(event) {
+    events.push(event);
+    displayEvents(events);
+    populateEventDropdown();
+}
+
+function getMusicEvents() {
+    return events.filter(event => event.category === 'music');
+}
+
+function formatEventNames() {
+    return events.map(event => {
+        if (event.category === 'workshop') {
+            return `Workshop: ${event.name}`;
+        }
+        return event.name;
+    });
+}
+
+// 7. DOM Manipulation & 8. Event Handling
+function registerForEvent(eventId) {
+    const eventIndex = events.findIndex(event => event.id === eventId);
+    
+    if (eventIndex === -1) {
+        throw new Error("Event not found.");
+    }
+    
+    const event = events[eventIndex];
+    const today = new Date();
+    const eventDate = new Date(event.date);
+    
+    if (eventDate < today) {
+        throw new Error("This event has already passed.");
+    }
+    
+    if (event.seats <= 0) {
+        throw new Error("This event is fully booked.");
+    }
+    
+    // Decrement seats
+    events[eventIndex].seats--;
+    
+    // Update UI
+    displayEvents(events);
+    populateEventDropdown();
+    
+    // Show success message
+    const statusElement = document.getElementById('registrationStatus');
+    statusElement.textContent = `Successfully registered for ${event.name}!`;
+    statusElement.className = 'success';
+    
+    return true;
+}
+
+function handleFormSubmit(event) {
+    event.preventDefault();
+    
+    const name = document.getElementById('userName').value.trim();
+    const email = document.getElementById('userEmail').value.trim();
+    const eventId = parseInt(document.getElementById('eventSelect').value);
+    
+    // Reset error messages
+    document.getElementById('nameError').textContent = '';
+    document.getElementById('emailError').textContent = '';
+    
+    // Validate inputs
+    let isValid = true;
+    
+    if (!name) {
+        document.getElementById('nameError').textContent = 'Name is required';
+        isValid = false;
+    }}
+    </script>
+</body>
+</html>
