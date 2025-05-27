@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display and Visibility</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Section that toggles visibility based on screen size -->
+    <div class="container mt-5">
+        <div class="d-none d-md-block">
+            <h2>This section is hidden on small screens and shows on medium and up.</h2>
+        </div>
+
+        <div class="d-lg-flex">
+            <h2>This section shows as flex on large screens and up.</h2>
+        </div>
+    </div>
+
+    <!-- Responsive Sidebar that only shows on tablets and above -->
+    <div class="container mt-5">
+        <div class="d-none d-md-block">
+            <div class="bg-light p-3">
+                <h5>Responsive Sidebar</h5>
+                <p>This sidebar is visible on tablets (md) and larger screens.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
